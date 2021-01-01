@@ -10,13 +10,13 @@ class Monitor:
 		self.screen_y_length = g.size().height
 
 	def get_screen_frame(self):
-		open_cv_image = numpy.array(ImageGrab.grab()) 
+		open_cv_image = np.array(ImageGrab.grab())
 		# Convert RGB to BGR 
 		return open_cv_image[:, :, ::-1].copy()
 
 class ObjectDetector:
 	def read_object_position(self, frame):
-		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		blur = cv2.medianBlur(gray, 5)
 		sharpen_kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
 		sharpen = cv2.filter2D(blur, -1, sharpen_kernel)
@@ -38,8 +38,8 @@ class ObjectDetector:
 		for c in cnts:
 			area = cv2.contourArea(c)
 			if area > min_area and area < max_area:
-				#x,y,w,h = cv2.boundingRect(c)
-				#ROI = image[y:y+h, x:x+h]
+				x,y,w,h = cv2.boundingRect(c)
+				# ROI = image[y:y+h, x:x+h]
 				#cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 2)
 				#image_number += 1
 				objects.append([x+(w/2), y+(h/2)])
@@ -52,7 +52,7 @@ class AimBot(Monitor, ObjectDetector):
 	def get_mouse_position(self):
 		return g.position()
 
-	def populate_relative_dist(object):
+	def populate_relative_dist(self, object):
 		obj_x = object[0]
 		obj_y = object[1]
 		mouse_position = self.get_mouse_position()
@@ -72,6 +72,8 @@ def main():
 		ab.emit_mouse_action(cord_diff[0], cord_diff[1])
 
 if __name__ == "__main__":
+	print('Ready')
 	time.sleep(5)
+	print('start')
 	main()
 	print('complete iteration')

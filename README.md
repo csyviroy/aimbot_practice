@@ -1,1 +1,1 @@
-# aimbot using image processing and pyguiauto
+# aimbot using image processing and pyautogui
